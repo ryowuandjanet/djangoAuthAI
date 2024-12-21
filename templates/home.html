@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Welcome - Django Auth{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Welcome to Django Auth</h1>
+    
+    {% if user.is_authenticated %}
+        <div class="text-center">
+            <p class="lead">歡迎回來，{{ user.email }}！</p>
+            <a href="{% url 'account_logout' %}" class="btn btn-outline-primary">登出</a>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <p class="lead">請登入以存取您的帳戶。</p>
+            <a href="{% url 'account_login' %}" class="btn btn-primary">登入</a>
+            <a href="{% url 'account_signup' %}" class="btn btn-outline-primary">註冊</a>
+        </div>
+    {% endif %}
+{% endblock %}

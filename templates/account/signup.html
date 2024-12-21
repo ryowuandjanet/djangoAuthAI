@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}註冊 - Django Auth{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center">{% trans "註冊帳號" %}</h1>
+
+                <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p class="mb-0">{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">{% trans "電子郵件" %}</label>
+                        <input type="email" name="email" class="form-control" id="id_email" required>
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">{% trans "密碼" %}</label>
+                        <input type="password" name="password1" class="form-control" id="id_password1" required>
+                        {% if form.password1.errors %}
+                            <div class="invalid-feedback">{{ form.password1.errors }}</div>
+                        {% endif %}
+                        {% if form.password1.help_text %}
+                            <div class="form-text">
+                                <small>{{ form.password1.help_text|safe }}</small>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="id_password2" class="form-label">{% trans "確認密碼" %}</label>
+                        <input type="password" name="password2" class="form-control" id="id_password2" required>
+                        {% if form.password2.errors %}
+                            <div class="invalid-feedback">{{ form.password2.errors }}</div>
+                        {% endif %}
+                    </div>
+
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">{% trans "註冊" %}</button>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <p class="text-muted mb-0">
+                            {% trans "已經有帳號了？" %}
+                            <a href="{{ login_url }}" class="text-decoration-none">
+                                {% trans "立即登入" %}
+                            </a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if SOCIALACCOUNT_ENABLED %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <p class="text-center mb-3">{% trans "或使用以下方式註冊" %}</p>
+                    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% block extra_css %}
+<style>
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    
+    .invalid-feedback {
+        display: block;
+    }
+</style>
+{% endblock %}
+{% endblock %}
